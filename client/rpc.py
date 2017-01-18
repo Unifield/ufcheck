@@ -547,7 +547,7 @@ for port in [20, 110, 8070]:
 	before_time = datetime.now()
 	
 	try:
-		connector = GzipNetRPCConnector('uf0003.unifield.org', port, timeout=500, retry=10) 
+		connector = GzipNetRPCConnector('uf0003.unifield.org', port, timeout=500, retry=2) 
 		content = Common(connector).get_zip_file()
 	except socket.error as e:
 		print "Unable to connect"
