@@ -6,6 +6,7 @@ OpenObject Client Library
 """
 
 import sys
+import os
 import socket
 import zlib
 import xmlrpclib
@@ -542,12 +543,17 @@ class Object(object):
 
 from datetime import datetime
 
-for port in [20, 110, 8070]:
+for port in [ 8070 ]:
 	print "== CHECKING PORT %d ==" % port
+	print
+
 	before_time = datetime.now()
 	
 	try:
-		connector = GzipNetRPCConnector('uf0003.unifield.org', port, timeout=500, retry=2) 
+		host = 'check-internet.unifield.org'
+		if 'CHECK_HOST' in os.environ:
+			host = os.environ['CHECK_HOST']
+		connector = GzipNetRPCConnector(host, port, timeout=500, retry=2) 
 		content = Common(connector).get_zip_file()
 	except socket.error as e:
 		print "Unable to connect"
@@ -568,9 +574,10 @@ for port in [20, 110, 8070]:
 	if md5hash == '6ed32b24be2b7e270e79f92fb2680754':
 		print "OK"
 	else:
-		print "KO"
+		print "Failed. Got hash %s." % md5hash
 	print ""
 
+print "Press [return] to exit."
 raw_input()
 		
 '''
