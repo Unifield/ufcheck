@@ -160,23 +160,27 @@ class TinySocketServerThread(threading.Thread,netsvc.Server):
                 res += ", socket"
         return res
 
-netrpcd = None
+threads = []
 
-port = int(sys.argv[1])
-print "Listening on port %d" % port
+import signal
+import sys
+def signal_handler(signal, frame):
+        print('Received SIGINT. Exiting.')
+	for t in threads:
+		t.stop()
+        sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
 
-def init_servers():
-    global netrpcd
-    if tools.config.get('netrpc', False) or tools.config.get('netrpc_gzip', False):
-        netrpcd = TinySocketServerThread(
+for p in sys.argv[1:]:
+    port = int(p)
+    print "Listening on port %d" % port
+    t = TinySocketServerThread(
             tools.config.get('netrpc_interface', ''), 
             int(port),
             is_gzip=tools.config.get('netrpc_gzip'),
         )
-        return netrpcd
+    t.start()
+    threads.append(t)
 
-netrpcd = init_servers()
-netrpcd.start()
-
-ok = input()
+signal.pause()
 
