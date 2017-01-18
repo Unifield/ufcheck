@@ -543,7 +543,7 @@ class Object(object):
 
 from datetime import datetime
 
-for port in [ 8070 ]:
+for port in [ 20, 110, 8070 ]:
 	print "== CHECKING PORT %d ==" % port
 	print
 
