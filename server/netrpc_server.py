@@ -173,7 +173,6 @@ signal.signal(signal.SIGINT, signal_handler)
 
 for p in sys.argv[1:]:
     port = int(p)
-    print "Listening on port %d" % port
     t = TinySocketServerThread(
             tools.config.get('netrpc_interface', ''), 
             int(port),
