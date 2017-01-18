@@ -1,0 +1,8 @@
+Here is the procedure to create an executable from the Python source code to run it everywhere.
+
+1) Install py2exe (available on sourceforge. I've used py2exe 0.6.9. It works fine). You might have to add the python executable to your PATH.
+2) Open a console and browse to the code's directory (zip file available in OwnCloud in Unifield files/Tools/Checkinternet/src_client)
+3) Browse to the source code available here and run: python setup.py py2exe
+4) Rename dist/rpc.exe to checkinternet.exe
+5) ZIP the "dist" directory and ship it to the IT referants
+
