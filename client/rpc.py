@@ -12,7 +12,7 @@ import zlib
 import xmlrpclib
 from timeout_transport import TimeoutTransport
 from gzip_xmlrpclib import GzipTransport, GzipSafeTransport
-#from osv import osv
+from datetime import datetime
 from tools.translate import _
 import tools
 
@@ -112,7 +112,7 @@ class XmlRPCConnector(Connector):
                     self._logger.debug("retry to connect %s, error : %s" ,i, e)
                 i += 1
         if error:
-            raise osv.except_osv(_('Error!'), "Unable to proceed for the following reason:\n%s" % (e.faultCode if hasattr(e, 'faultCode') else tools.ustr(e)))
+            raise RuntimeError("Unable to proceed for the following reason: %s" % (e.faultCode if hasattr(e, 'faultCode') else tools.ustr(e)))
 
 
 """Modified version of xmlrcpclib.Transport.request (same in Python 2.4, 2.5, 2.6)
@@ -323,7 +323,7 @@ class NetRPCConnector(Connector):
                 
         socket.disconnect()
         if error:
-            raise osv.except_osv(_('Error!'), "Unable to proceed for the following reason:\n%s" % (e.faultCode if hasattr(e, 'faultCode') else tools.ustr(e)))
+            raise RuntimeError("Unable to proceed for the following reason: %s" % (e.faultCode if hasattr(e, 'faultCode') else tools.ustr(e)))
         return result
 
 class GzipNetRPCConnector(NetRPCConnector):
@@ -541,8 +541,6 @@ class Object(object):
 
         return self.read(record_ids, fields=fields, context=context)
 
-from datetime import datetime
-
 for port in [ 20, 110, 8070 ]:
 	print "== CHECKING PORT %d ==" % port
 	print
@@ -579,70 +577,3 @@ for port in [ 20, 110, 8070 ]:
 
 print "Press [return] to exit."
 raw_input()
-		
-'''
-import Tkinter
-import Pmw
-
-class TextDisplay(Pmw.MegaWidget):
-
-    # Demo Pmw megawidget.
-    def __init__(self, parent = None, **kw):
-
-        # Define the megawidget options.
-        optiondefs = ()
-        self.defineoptions(kw, optiondefs)
-
-        # Initialise the base class (after defining the options).
-        Pmw.MegaWidget.__init__(self, parent)
-
-        # Create the components.
-        interior = self.interior()
-
-        self._text = self.createcomponent('text',
-        (), None,
-        Tkinter.Text, (interior,), state = 'disabled')
-        self._text.pack(side='left', fill='both', expand='yes')
-
-        self._scrollbar = self.createcomponent('scrollbar',
-        (), None,
-        Tkinter.Scrollbar, (interior,), command = self._text.yview)
-        self._scrollbar.pack(side='right', fill='y')
-        self._text.configure(yscrollcommand = self._scrollbar.set)
-
-        # Check keywords and initialise options.
-        self.initialiseoptions()
-
-    def display(self, info):
-        self._text.configure(state = 'normal')
-        self._text.delete('1.0', 'end')
-        self._text.insert('1.0', info)
-        self._text.configure(state = 'disabled')
-
-    def append(self, info):
-        self._text.configure(state = 'normal')
-        self._text.insert('end', info)
-        self._text.configure(state = 'disabled')
-
-
-
-class Demo:
-    def __init__(self, parent):
-        # Create and pack the megawidget.
-        text = TextDisplay(parent,
-        text_background = 'aliceblue',
-        text_width = 40,
-        text_height = 10,
-        text_wrap = 'none',
-        )
-        text.pack(fill = 'both', expand = 1)
-        text.display('This is an example of a simple Pmw megawidget.\n\n' +
-        'Public attributes of the Tkinter module:\n\n')
-        for name in dir(Tkinter):
-            if name[0] != '_':
-                text.append('    ' + name + '\n')
-
-if __name__ == '__main__':
-    pass
-'''
-
