@@ -27,9 +27,6 @@ except:
     import StringIO
 
 import logging
-#import logging.config
-
-#logging.config.fileConfig('logging.cfg')
 
 GZIP_MAGIC = '\x78\xda' # magic when max compression used
 NB_RETRY = 10
